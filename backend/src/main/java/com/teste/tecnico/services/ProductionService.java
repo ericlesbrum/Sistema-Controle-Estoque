@@ -2,10 +2,10 @@ package com.teste.tecnico.services;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,55 +21,57 @@ import com.teste.tecnico.repositories.RawMaterialRepository;
 public class ProductionService {
 	private final ProductRepository productRepository;
 	private final RawMaterialRepository rawMaterialRepository;
-	
+
 	public ProductionService(ProductRepository productRepository, RawMaterialRepository rawMaterialRepository) {
 		super();
 		this.productRepository = productRepository;
 		this.rawMaterialRepository = rawMaterialRepository;
 	}
-	
-    @Transactional(readOnly = true)
+
+	@Transactional(readOnly = true)
 	public ProductionResponseDTO calculateProduction() {
 
-		List<Product> products = productRepository.findAll();
-		List<RawMaterial> materials = rawMaterialRepository.findAll();
+		List<Product> products = productRepository.findAll().stream()
+				.sorted(Comparator.comparing(Product::getPrice).reversed()).toList();
 
-		Map<Integer, Integer> stock = new HashMap<>();
-
-		for (RawMaterial rm : materials) {
-			stock.put(rm.getId(), rm.getStockQuantity());
-		}
-
-		products.sort(Comparator.comparing(Product::getPrice).reversed());
+		Map<Integer, Integer> stock = buildStockSnapshot(rawMaterialRepository.findAll());
 
 		Map<String, Integer> productionPlan = new LinkedHashMap<>();
 		BigDecimal totalValue = BigDecimal.ZERO;
 
 		for (Product product : products) {
+			int qty = maxProducible(product, stock);
 
-			int maxQuantity = Integer.MAX_VALUE;
-
-			for (ProductRawMaterial prm : product.getProductRawMaterials()) {
-
-				int available = stock.getOrDefault(prm.getRawMaterial().getId(), 0);
-				int possible = available / prm.getQuantity();
-
-				maxQuantity = Math.min(maxQuantity, possible);
-			}
-
-			if (maxQuantity > 0 && maxQuantity != Integer.MAX_VALUE) {
-
-				productionPlan.put(product.getName(), maxQuantity);
-
-				totalValue = totalValue.add(product.getPrice().multiply(BigDecimal.valueOf(maxQuantity)));
-
-				for (ProductRawMaterial prm : product.getProductRawMaterials()) {
-					int id = prm.getRawMaterial().getId();
-					stock.put(id, stock.get(id) - (prm.getQuantity() * maxQuantity));
-				}
+			if (qty > 0) {
+				productionPlan.put(product.getName(), qty);
+				totalValue = totalValue.add(valueof(product, qty));
+				deductStock(product.getProductRawMaterials(), qty, stock);
 			}
 		}
 
 		return new ProductionResponseDTO(productionPlan, totalValue);
 	}
+
+	private Map<Integer, Integer> buildStockSnapshot(List<RawMaterial> materials) {
+		return materials.stream().collect(Collectors.toMap(RawMaterial::getId, RawMaterial::getStockQuantity,
+				Integer::sum, java.util.HashMap::new));
+	}
+
+	private int maxProducible(Product product, Map<Integer, Integer> stock) {
+		return product.getProductRawMaterials().stream().mapToInt(prm -> possibleUnits(prm, stock)).min().orElse(0);
+	}
+
+	private int possibleUnits(ProductRawMaterial prm, Map<Integer, Integer> stock) {
+		int available = stock.getOrDefault(prm.getRawMaterial().getId(), 0);
+		return available / prm.getQuantity();
+	}
+
+	private void deductStock(List<ProductRawMaterial> materials, int quantity, Map<Integer, Integer> stock) {
+		materials.forEach(
+				prm -> stock.merge(prm.getRawMaterial().getId(), -(prm.getQuantity() * quantity), Integer::sum));
+	}
+	
+	private BigDecimal valueof(Product product, int quantity) {
+        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 }
