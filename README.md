@@ -83,4 +83,4 @@ npm run dev
 
 ## Licença
 
-© 2025 Inventory Control System. Todos os direitos reservados.
+© 2026 Inventory Control System. Todos os direitos reservados.
