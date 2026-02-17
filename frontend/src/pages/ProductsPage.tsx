@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import { CreateProductDTO } from '../dtos/product.dto';
-import { FaEdit, FaPlus, FaTrash, FaBoxes, FaEye } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTrash, FaBoxes, FaPuzzlePiece } from 'react-icons/fa';
 import IconButton from '../components/common/IconButton';
 
 const ProductsPage = () => {
@@ -84,7 +84,7 @@ const ProductsPage = () => {
                 <th>Nome</th>
                 <th>Preço</th>
                 <th className="text-center">Ações</th>
-                <th className="text-center">Detalhes</th>
+                <th className="text-center">Associações</th>
               </tr>
             </thead>
             <tbody>
@@ -120,8 +120,8 @@ const ProductsPage = () => {
                     </td>
                     <td className="text-center">
                       <Link to={`/products/${p.id}`}>
-                        <IconButton icon={FaEye} className='btn-details-outline' size="sm">
-                          Info
+                        <IconButton icon={FaPuzzlePiece} className='btn-details-outline' size="sm">
+                          Associar
                         </IconButton>
                       </Link>
                     </td>
