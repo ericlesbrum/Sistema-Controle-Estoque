@@ -78,3 +78,9 @@ npm run dev
 │   └── README.md
 └── README.md         # Este arquivo
 ```
+
+---
+
+## Licença
+
+© 2025 Inventory Control System. Todos os direitos reservados.
