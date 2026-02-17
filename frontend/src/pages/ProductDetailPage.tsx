@@ -113,7 +113,7 @@ const ProductDetailPage = () => {
                       <IconButton
                         icon={FaEdit}
                         size="sm"
-                        className="me-2 btn-edit-outline"
+                        className="me-2 btn-edit"
                         onClick={() => handleOpenEdit(a)}
                       >
                         Editar

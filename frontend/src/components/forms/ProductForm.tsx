@@ -79,14 +79,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           <Modal.Footer className="border-0 px-0 pb-0">
             <IconButton
               icon={FaTimes}
-              variant="outline-secondary"
+              className='btn-create-outline'
               onClick={onHide}
             >
-              Cancel
+              Cancelar
             </IconButton>
             <IconButton
               icon={FaSave}
-              variant="primary"
+              className='btn-create'
               type="submit"
               disabled={isSubmitting}
             >

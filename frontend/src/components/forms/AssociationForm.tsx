@@ -99,15 +99,15 @@ const AssociationForm: React.FC<AssociationFormProps> = ({
           <Modal.Footer className="border-0 px-0 pb-0">
             <IconButton
               icon={FaTimes}
-              variant="outline-secondary"
+              className='btn-create-outline'
               onClick={onHide}
             >
               Cancelar
             </IconButton>
             <IconButton
               icon={FaSave}
-              variant="primary"
               type="submit"
+              className='btn-create'
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Salvando...' : 'Salvar'}

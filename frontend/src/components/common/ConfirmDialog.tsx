@@ -1,5 +1,6 @@
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { FaCheck, FaTimes, FaExclamationTriangle } from 'react-icons/fa';
+import IconButton from './IconButton';
 
 interface ConfirmDialogProps {
   show: boolean;
@@ -19,8 +20,8 @@ const ConfirmDialog = ({
   title,
   message,
   confirmVariant = 'danger',
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText = 'Confirmar',
+  cancelText = 'Cancelar',
 }: ConfirmDialogProps) => {
   const getIcon = () => {
     switch (confirmVariant) {
@@ -54,12 +55,22 @@ const ConfirmDialog = ({
         <p className="mb-0 text-muted">{message}</p>
       </Modal.Body>
       <Modal.Footer className="border-0 pt-0">
-        <Button variant="outline-secondary" onClick={onHide} className="px-4">
-          <FaTimes className="me-2" /> {cancelText}
-        </Button>
-        <Button variant={confirmVariant} onClick={onConfirm} className="px-4">
-          <FaCheck className="me-2" /> {confirmText}
-        </Button>
+        <IconButton
+          icon={FaTimes}
+          className='btn-create-outline me-2'
+          size="sm"
+          onClick={onHide}
+        >
+          {cancelText}
+        </IconButton>
+        <IconButton
+          icon={FaCheck}
+          className='btn-remove me-2'
+          size="sm"
+          onClick={onConfirm}
+        >
+          {confirmText}
+        </IconButton>
       </Modal.Footer>
     </Modal>
   );

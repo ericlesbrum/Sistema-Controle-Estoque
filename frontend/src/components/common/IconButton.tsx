@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, ButtonProps } from 'react-bootstrap';
 import { IconType } from 'react-icons';
-// import '../../styles/IconButton.css';
 
 interface IconButtonProps extends ButtonProps {
   icon: IconType;
