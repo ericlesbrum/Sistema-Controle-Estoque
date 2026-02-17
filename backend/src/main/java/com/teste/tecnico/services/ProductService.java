@@ -34,14 +34,14 @@ public class ProductService {
 	
 	public ProductDTO  getProductById(int id) {
 		Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
 
         return mapper.toDTO(product);
 	}
 	
 	public ProductDTO update(ProductDTO productDTO) {
 		Product entity = productRepository.findById(productDTO.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
 
         mapper.updateEntityFromDTO(productDTO, entity);
 
@@ -50,7 +50,7 @@ public class ProductService {
 	
 	public void deleteProductById(int id) {
 		 if (!productRepository.existsById(id)) {
-		        throw new ResourceNotFoundException("Product not found");
+		        throw new ResourceNotFoundException("Produto não encontrado");
 		    }
 		    productRepository.deleteById(id);
 	}

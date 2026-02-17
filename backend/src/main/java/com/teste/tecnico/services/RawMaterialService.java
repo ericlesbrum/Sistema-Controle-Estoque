@@ -33,7 +33,7 @@ public class RawMaterialService {
 	
 	public RawMaterialDTO getById(int id) {
         RawMaterial entity = materialRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Matéria-prima não encontrada"));
 
         return mapper.toDTO(entity);
     }
@@ -45,18 +45,18 @@ public class RawMaterialService {
     
     public RawMaterialDTO  update(RawMaterialDTO rawMaterialDTO) {
     	RawMaterial entity = materialRepository.findById(rawMaterialDTO.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Matéria-prima não encontrada"));
     	mapper.updateEntityFromDTO(rawMaterialDTO, entity);
     	return mapper.toDTO(materialRepository.save(entity));
     }
     
     public void delete(int id) {
     	RawMaterial entity = materialRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Matéria-prima não encontrada"));
         
         boolean hasAssociations = productRawMaterialRepository.existsByRawMaterialId(id);
         if (hasAssociations) {
-        	throw new IllegalStateException("Cannot delete raw material because it is used by one or more products.");
+        	throw new IllegalStateException("Não é possível excluir a matéria-prima, pois ela está sendo utilizada em um ou mais produtos.");
         }
         materialRepository.delete(entity);
     }

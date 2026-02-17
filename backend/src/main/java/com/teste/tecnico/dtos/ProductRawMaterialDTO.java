@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 public class ProductRawMaterialDTO {
 	private Integer productId;
     private Integer rawMaterialId;
-    @Min(value = 1, message = "Quantity must be at least 1")
+    @Min(value = 1, message = "Quantidade deve ser maior que 1")
     private int quantity;
     
 	public Integer getProductId() {

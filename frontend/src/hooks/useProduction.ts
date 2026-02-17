@@ -7,6 +7,8 @@ export const useProduction = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const clearError = useCallback(() => setError(null), []);
+
   const calculateProduction = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -24,6 +26,7 @@ export const useProduction = () => {
     production,
     loading,
     error,
+    clearError,
     calculateProduction,
   };
 };

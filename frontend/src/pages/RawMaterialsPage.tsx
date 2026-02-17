@@ -10,7 +10,7 @@ import { FaPlus, FaEdit, FaTrash, FaCube } from 'react-icons/fa';
 import IconButton from '../components/common/IconButton';
 
 const RawMaterialsPage = () => {
-  const { materials, loading, error, createMaterial, updateMaterial, deleteMaterial } = useRawMaterials();
+  const { materials, loading, error, fetchMaterials, createMaterial, updateMaterial, deleteMaterial, clearError } = useRawMaterials();
   const [showModal, setShowModal] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState<CreateRawMaterialDTO | undefined>();
   const [editingId, setEditingId] = useState<number | undefined>();
@@ -59,12 +59,19 @@ const RawMaterialsPage = () => {
         <h2 className="fw-bold mb-0">Matérias-Prima</h2>
       </div>
 
-      {error && <ErrorAlert message={error} />}
+      {error && (
+        <ErrorAlert
+          message={error}
+          dismissible
+          onClose={clearError}
+          onRetry={fetchMaterials}
+        />
+      )}
 
       <Card className="shadow-sm border-0">
         <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center">
           <span className="fw-semibold">Lista de Matérias-Prima</span>
-          <IconButton icon={FaPlus} className='btn-create' size="sm" onClick={handleOpenCreate}>
+          <IconButton icon={FaPlus} className="btn-create" size="sm" onClick={handleOpenCreate}>
             Adicionar Novo
           </IconButton>
         </Card.Header>
@@ -86,7 +93,7 @@ const RawMaterialsPage = () => {
                   </td>
                 </tr>
               ) : (
-                materials.map(m => (
+                materials.map((m) => (
                   <tr key={m.id}>
                     <td className="ps-4">{m.id}</td>
                     <td className="fw-medium">{m.name}</td>
@@ -95,14 +102,14 @@ const RawMaterialsPage = () => {
                       <IconButton
                         icon={FaEdit}
                         size="sm"
-                        className="me-2 btn-edit"
+                        className="me-2 btn-edit-outline"
                         onClick={() => handleOpenEdit(m)}
                       >
                         Editar
                       </IconButton>
                       <IconButton
                         icon={FaTrash}
-                        className='btn-remove'
+                        className="btn-remove"
                         size="sm"
                         onClick={() => handleDeleteClick(m.id)}
                       >

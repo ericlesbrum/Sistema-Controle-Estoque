@@ -7,6 +7,8 @@ export const useAssociations = (productId?: number) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const clearError = useCallback(() => setError(null), []);
+
   const fetchAssociations = useCallback(async () => {
     if (!productId) return;
     setLoading(true);
@@ -73,6 +75,7 @@ export const useAssociations = (productId?: number) => {
     associations,
     loading,
     error,
+    clearError,
     fetchAssociations,
     createAssociation,
     updateAssociation,

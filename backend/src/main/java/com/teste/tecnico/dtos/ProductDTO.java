@@ -21,7 +21,7 @@ public class ProductDTO {
 		super();
 	}
 
-	public ProductDTO(int id, @NotBlank(message = "Name is required") String name,
+	public ProductDTO(int id, @NotBlank(message = "Nome é obrigatório") String name,
 			@NotNull @DecimalMin("0.01") BigDecimal value) {
 		super();
 		this.id = id;
@@ -29,7 +29,7 @@ public class ProductDTO {
 		this.price = value;
 	}
 
-	public ProductDTO(@NotBlank(message = "Name is required") String name,
+	public ProductDTO(@NotBlank(message = "Nome é obrigatório") String name,
 			@NotNull @DecimalMin("0.01") BigDecimal value) {
 		super();
 		this.name = name;

@@ -18,8 +18,17 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
 
   const { products } = useProducts();
-  const product = products.find(p => p.id === productId);
-  const { associations, loading, error, createAssociation, updateAssociation, deleteAssociation } = useAssociations(productId);
+  const product = products.find((p) => p.id === productId);
+  const {
+    associations,
+    loading,
+    error,
+    fetchAssociations,
+    createAssociation,
+    updateAssociation,
+    deleteAssociation,
+    clearError,
+  } = useAssociations(productId);
   const { materials: rawMaterials } = useRawMaterials();
 
   const [showModal, setShowModal] = useState(false);
@@ -75,16 +84,23 @@ const ProductDetailPage = () => {
         </IconButton>
         <h2 className="ms-3 mb-0 fw-bold">
           <FaBoxOpen className="me-2 text-primary" />
-          {product?.name || 'Product'} - Matérias-Prima
+          {product?.name || 'Produto'} - Matérias-Prima
         </h2>
       </div>
 
-      {error && <ErrorAlert message={error} />}
+      {error && (
+        <ErrorAlert
+          message={error}
+          dismissible
+          onClose={clearError}
+          onRetry={fetchAssociations}
+        />
+      )}
 
       <Card className="shadow-sm border-0">
         <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center">
           <span className="fw-semibold">Lista de Matérias-Prima</span>
-          <IconButton icon={FaPlus} className='btn-create' size="sm" onClick={handleOpenCreate}>
+          <IconButton icon={FaPlus} className="btn-create" size="sm" onClick={handleOpenCreate}>
             Adicionar Novo
           </IconButton>
         </Card.Header>
@@ -105,7 +121,7 @@ const ProductDetailPage = () => {
                   </td>
                 </tr>
               ) : (
-                associations.map(a => (
+                associations.map((a) => (
                   <tr key={a.id}>
                     <td className="ps-4 fw-medium">{a.rawMaterialName}</td>
                     <td>{a.quantity}</td>
@@ -113,14 +129,14 @@ const ProductDetailPage = () => {
                       <IconButton
                         icon={FaEdit}
                         size="sm"
-                        className="me-2 btn-edit"
+                        className="me-2 btn-edit-outline"
                         onClick={() => handleOpenEdit(a)}
                       >
                         Editar
                       </IconButton>
                       <IconButton
                         icon={FaTrash}
-                        className='btn-remove'
+                        className="btn-remove"
                         size="sm"
                         onClick={() => handleDeleteClick(a.id)}
                       >

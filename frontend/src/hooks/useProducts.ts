@@ -7,6 +7,8 @@ export const useProducts = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const clearError = useCallback(() => setError(null), []);
+
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -70,6 +72,7 @@ export const useProducts = () => {
     products,
     loading,
     error,
+    clearError,
     fetchProducts,
     createProduct,
     updateProduct,

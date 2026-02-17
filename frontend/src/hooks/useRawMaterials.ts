@@ -7,6 +7,8 @@ export const useRawMaterials = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const clearError = useCallback(() => setError(null), []);
+
   const fetchMaterials = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -70,6 +72,7 @@ export const useRawMaterials = () => {
     materials,
     loading,
     error,
+    clearError,
     fetchMaterials,
     createMaterial,
     updateMaterial,

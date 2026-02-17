@@ -11,7 +11,7 @@ import { FaEdit, FaPlus, FaTrash, FaBoxes, FaEye } from 'react-icons/fa';
 import IconButton from '../components/common/IconButton';
 
 const ProductsPage = () => {
-  const { products, loading, error, createProduct, updateProduct, deleteProduct } = useProducts();
+  const { products, loading, error, fetchProducts, createProduct, updateProduct, deleteProduct, clearError } = useProducts();
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<CreateProductDTO | undefined>();
   const [editingId, setEditingId] = useState<number | undefined>();
@@ -60,7 +60,14 @@ const ProductsPage = () => {
         <h2 className="fw-bold mb-0">Produtos</h2>
       </div>
 
-      {error && <ErrorAlert message={error} />}
+      {error && (
+        <ErrorAlert
+          message={error}
+          dismissible
+          onClose={clearError}
+          onRetry={fetchProducts}
+        />
+      )}
 
       <Card className="shadow-sm border-0">
         <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center">
@@ -97,7 +104,7 @@ const ProductsPage = () => {
                       <IconButton
                         icon={FaEdit}
                         size="sm"
-                        className="me-2 btn-edit"
+                        className="me-2 btn-edit-outline"
                         onClick={() => handleOpenEdit(p)}
                       >
                         Editar

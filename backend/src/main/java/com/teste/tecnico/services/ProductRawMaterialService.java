@@ -40,7 +40,7 @@ public class ProductRawMaterialService {
 
 		if (productRawMaterialRepository.existsByProductIdAndRawMaterialId(dto.getProductId(),
 				dto.getRawMaterialId())) {
-			throw new IllegalArgumentException("Association already exists for this product and raw material.");
+			throw new IllegalArgumentException("Já existe uma associação entre este produto e esta matéria-prima.");
 		}
 
 		ProductRawMaterial prm = new ProductRawMaterial();
@@ -78,18 +78,18 @@ public class ProductRawMaterialService {
 					dto.getRawMaterialId());
 			if (exists) {
 				throw new IllegalArgumentException(
-						"Another association with the same product and raw material already exists.");
+						"Já existe outra associação com o mesmo produto e matéria-prima.");
 			}
 			
 			if (productChanged) {
 				Product newProduct = productRepository.findById(dto.getProductId())
-						.orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+						.orElseThrow(() -> new ResourceNotFoundException("Product não encontrado"));
 				prm.setProduct(newProduct);
 			}
 			
 			if (materialChanged) {
 				RawMaterial newMaterial = rawMaterialRepository.findById(dto.getRawMaterialId())
-						.orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
+						.orElseThrow(() -> new ResourceNotFoundException("Matéria-prima não encontrada"));
 				prm.setRawMaterial(newMaterial);
 			}
 		}
@@ -102,7 +102,7 @@ public class ProductRawMaterialService {
 	@Transactional
 	public void deleteAssociation(int id) {
 		if (!productRawMaterialRepository.existsById(id)) {
-			throw new ResourceNotFoundException("Association not found");
+			throw new ResourceNotFoundException("Associação não encontrada");
 		}
 		productRawMaterialRepository.deleteById(id);
 	}

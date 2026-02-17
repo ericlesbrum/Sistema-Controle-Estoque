@@ -1,9 +1,9 @@
 import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { Modal, Form } from 'react-bootstrap';
-import { FaSave, FaTimes, FaExclamationCircle } from 'react-icons/fa';
+import { Form } from 'react-bootstrap';
+import { FaExclamationCircle } from 'react-icons/fa';
 import { CreateRawMaterialDTO } from '../../dtos/rawMaterial.dto';
-import IconButton from '../common/IconButton'; // ajuste o caminho conforme necessário
+import BaseFormModal from '../common/BaseFormModal';
+import { useFormModal } from '../../hooks/useFormModal';
 
 interface RawMaterialFormProps {
   show: boolean;
@@ -20,81 +20,58 @@ const RawMaterialForm: React.FC<RawMaterialFormProps> = ({
   initialData = { name: '', stockQuantity: 0 },
   title,
 }) => {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<CreateRawMaterialDTO>({
+  const { register, handleSubmit, errors, isSubmitting, submitError } = useFormModal<CreateRawMaterialDTO>({
     defaultValues: initialData,
+    onSubmit,
+    onSuccess: onHide,
   });
 
-  const handleFormSubmit: SubmitHandler<CreateRawMaterialDTO> = async (data) => {
-    await onSubmit(data);
-    reset();
-    onHide();
-  };
-
   return (
-    <Modal
+    <BaseFormModal
       show={show}
       onHide={onHide}
-      centered
-      className="raw-material-modal"
+      title={title}
+      onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+      error={submitError}
     >
-      <Modal.Header closeButton className="border-0 pb-0">
-        <Modal.Title className="fw-bold">{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="pt-2">
-        <Form onSubmit={handleSubmit(handleFormSubmit)}>
-          <Form.Group className="mb-4">
-            <Form.Label className="fw-semibold">Nome da Matéria-Prima</Form.Label>
-            <Form.Control
-              type="text"
-              {...register('name', { required: 'Nome da matéria-prima é obrigatório' })}
-              isInvalid={!!errors.name}
-              className="rounded-3 shadow-sm"
-              placeholder="Entre o nome da matéria-prima"
-            />
-            <Form.Control.Feedback type="invalid" className="d-flex align-items-center gap-1">
-              <FaExclamationCircle size={14} />
-              {errors.name?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
+      <Form.Group className="mb-4">
+        <Form.Label className="fw-semibold">
+          Nome da Matéria-Prima <span className="text-danger">*</span>
+        </Form.Label>
+        <Form.Control
+          type="text"
+          {...register('name', { required: 'Nome da matéria-prima é obrigatório' })}
+          isInvalid={!!errors.name}
+          className="rounded-3 shadow-sm"
+          placeholder="Entre o nome da matéria-prima"
+        />
+        <Form.Control.Feedback type="invalid" className="d-flex align-items-center gap-1">
+          <FaExclamationCircle size={14} />
+          {errors.name?.message}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-          <Form.Group className="mb-4">
-            <Form.Label className="fw-semibold">Quantidade em Estoque</Form.Label>
-            <Form.Control
-              type="number"
-              {...register('stockQuantity', {
-                required: 'Quantidade é obrigatória',
-                min: { value: 0, message: 'Quantidade deve ser pelo menos 0' }
-              })}
-              isInvalid={!!errors.stockQuantity}
-              className="rounded-3 shadow-sm"
-              placeholder="0"
-            />
-            <Form.Control.Feedback type="invalid" className="d-flex align-items-center gap-1">
-              <FaExclamationCircle size={14} />
-              {errors.stockQuantity?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Modal.Footer className="border-0 px-0 pb-0">
-            <IconButton
-              icon={FaTimes}
-              className='btn-create-outline'
-              onClick={onHide}
-            >
-              Cancelar
-            </IconButton>
-            <IconButton
-              icon={FaSave}
-              className='btn-create'
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Salvando...' : 'Salvar'}
-            </IconButton>
-          </Modal.Footer>
-        </Form>
-      </Modal.Body>
-    </Modal>
+      <Form.Group className="mb-4">
+        <Form.Label className="fw-semibold">
+          Quantidade em Estoque <span className="text-danger">*</span>
+        </Form.Label>
+        <Form.Control
+          type="number"
+          {...register('stockQuantity', {
+            required: 'Quantidade é obrigatória',
+            min: { value: 0, message: 'Quantidade deve ser pelo menos 0' },
+          })}
+          isInvalid={!!errors.stockQuantity}
+          className="rounded-3 shadow-sm"
+          placeholder="0"
+        />
+        <Form.Control.Feedback type="invalid" className="d-flex align-items-center gap-1">
+          <FaExclamationCircle size={14} />
+          {errors.stockQuantity?.message}
+        </Form.Control.Feedback>
+      </Form.Group>
+    </BaseFormModal>
   );
 };
 

@@ -7,14 +7,14 @@ import ErrorAlert from '../components/common/ErrorAlert';
 import IconButton from '../components/common/IconButton';
 
 const ProductionPage = () => {
-  const { production, loading, error, calculateProduction } = useProduction();
+  const { production, loading, error, calculateProduction, clearError } = useProduction();
 
   useEffect(() => {
     calculateProduction();
   }, [calculateProduction]);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorAlert message={error} />;
+  if (loading && !production) return <LoadingSpinner />;
+  if (error) return <ErrorAlert message={error} dismissible onClose={clearError} onRetry={calculateProduction} />;
   if (!production) return null;
 
   const hasProduction = Object.keys(production.productionPlan).length > 0;
@@ -26,7 +26,7 @@ const ProductionPage = () => {
           <FaBoxOpen className="me-2 text-primary" />
           Plano de Produção Sugerido
         </h2>
-        <IconButton icon={FaSyncAlt} className='btn-refresh' onClick={calculateProduction}>
+        <IconButton icon={FaSyncAlt} className="btn-refresh" onClick={calculateProduction}>
           Atualizar
         </IconButton>
       </div>
