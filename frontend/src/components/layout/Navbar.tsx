@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { FaBoxes, FaCube, FaChartLine } from 'react-icons/fa';
-import styles from '../Navbar.module.css';
+import styles from '../../styles/Navbar.module.css';
 
 const CustomNavbar = () => {
   const location = useLocation();

@@ -1,4 +1,4 @@
-@import "../styles/Variables.css";
+@import "./Variables.css";
 
 .navbar {
   background: var(--dark) !important;
