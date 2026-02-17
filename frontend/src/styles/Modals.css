@@ -1,0 +1,30 @@
+.modal-content {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  background-color: var(--primary);
+  color: var(--white);
+  border-bottom: none;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  padding: 1.5rem;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--gray-light);
+  padding: 1.5rem;
+}

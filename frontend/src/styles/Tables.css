@@ -1,0 +1,29 @@
+.table {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.table thead th {
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  border-bottom: none;
+  padding: 1rem;
+}
+
+.table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-color: var(--gray-light);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+  transition: background-color 0.2s;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.02);
+}

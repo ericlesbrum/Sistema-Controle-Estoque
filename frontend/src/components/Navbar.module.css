@@ -1,0 +1,65 @@
+@import "../styles/Variables.css";
+
+.navbar {
+  background: var(--dark) !important;
+  box-shadow: var(--shadow-lg);
+  padding: 0.75rem 0;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--white) !important;
+  transition: opacity 0.2s ease;
+}
+
+.brand:hover {
+  opacity: 0.9;
+}
+
+.navLink {
+  font-weight: 500;
+  padding: 0.5rem 1.25rem !important;
+  margin: 0 0.25rem;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.85) !important;
+  display: flex;
+  align-items: center;
+}
+
+.navLink:hover {
+  background-color: var(--gray) !important;
+  color: var(--white) !important;
+  transform: translateY(-1px);
+}
+
+.active {
+  background: var(--gray-dark) !important;
+  color: var(--white) !important;
+  box-shadow: var(--shadow);
+}
+
+.active:hover {
+  background: linear-gradient(
+    135deg,
+    var(--gray-light) 0%,
+    var(--gray) 100%
+  ) !important;
+}
+
+.icon {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.toggler {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.toggler:focus {
+  box-shadow: none;
+}

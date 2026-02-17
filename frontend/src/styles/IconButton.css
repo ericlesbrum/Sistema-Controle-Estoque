@@ -1,0 +1,206 @@
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.icon-button .icon-btn {
+  font-size: 1.1em;
+  transition: transform 0.2s;
+}
+
+.icon-button:hover .icon-btn {
+  transform: scale(1.1);
+}
+
+.icon-button.btn-sm .icon-btn {
+  font-size: 1em;
+}
+
+.icon-button.btn-lg .icon-btn {
+  font-size: 1.2em;
+}
+
+.icon-button,
+.icon-button .text-btn {
+  line-height: 1.5;
+}
+
+.btn-create {
+  background-color: var(--primary);
+  border-color: var(--primary-dark);
+  color: var(--white);
+}
+.btn-create:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: var(--white);
+}
+
+.btn-edit {
+  background-color: var(--edit);
+  border-color: var(--edit-dark);
+  color: var(--white);
+}
+.btn-edit:hover {
+  background-color: var(--edit-dark);
+  border-color: var(--edit-dark);
+  color: var(--white);
+}
+
+.btn-details {
+  background-color: var(--detail);
+  border-color: var(--detail-dark);
+  color: var(--white);
+}
+.btn-details:hover {
+  background-color: var(--detail-dark);
+  border-color: var(--detail-dark);
+  color: var(--white);
+}
+
+.btn-remove {
+  background-color: var(--delete);
+  border-color: var(--delete-dark);
+  color: var(--white);
+}
+.btn-remove:hover {
+  background-color: var(--delete-dark);
+  border-color: var(--delete-dark);
+  color: var(--white);
+}
+
+.btn-success {
+  background-color: var(--success);
+  border-color: var(--success-dark);
+  color: var(--white);
+}
+.btn-success:hover {
+  background-color: var(--success-dark);
+  border-color: var(--success-dark);
+  color: var(--white);
+}
+
+.btn-warning {
+  background-color: var(--warning);
+  border-color: var(--warning-dark);
+  color: var(--dark);
+}
+.btn-warning:hover {
+  background-color: var(--warning-dark);
+  border-color: var(--warning-dark);
+  color: var(--dark);
+}
+
+.btn-info {
+  background-color: var(--info);
+  border-color: var(--info-dark);
+  color: var(--white);
+}
+.btn-info:hover {
+  background-color: var(--info-dark);
+  border-color: var(--info-dark);
+  color: var(--white);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  border-color: var(--secondary-dark);
+  color: var(--white);
+}
+.btn-secondary:hover {
+  background-color: var(--secondary-dark);
+  border-color: var(--secondary-dark);
+  color: var(--white);
+}
+
+.btn-create-outline,
+.btn-refresh {
+  background-color: transparent;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.btn-create-outline:hover,
+.btn-refresh:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.btn-edit-outline {
+  background-color: transparent;
+  border-color: var(--edit);
+  color: var(--edit);
+}
+.btn-edit-outline:hover {
+  background-color: var(--edit);
+  border-color: var(--edit);
+  color: var(--white);
+}
+
+.btn-details-outline {
+  background-color: transparent;
+  border-color: var(--detail);
+  color: var(--detail);
+}
+.btn-details-outline:hover {
+  background-color: var(--detail);
+  border-color: var(--detail);
+  color: var(--white);
+}
+
+.btn-remove-outline {
+  background-color: transparent;
+  border-color: var(--delete);
+  color: var(--delete);
+}
+.btn-remove-outline:hover {
+  background-color: var(--delete);
+  border-color: var(--delete);
+  color: var(--white);
+}
+
+.btn-success-outline {
+  background-color: transparent;
+  border-color: var(--success);
+  color: var(--success);
+}
+.btn-success-outline:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--white);
+}
+
+.btn-warning-outline {
+  background-color: transparent;
+  border-color: var(--warning);
+  color: var(--warning-dark);
+}
+.btn-warning-outline:hover {
+  background-color: var(--warning);
+  border-color: var(--warning);
+  color: var(--dark);
+}
+
+.btn-info-outline {
+  background-color: transparent;
+  border-color: var(--info);
+  color: var(--info);
+}
+.btn-info-outline:hover {
+  background-color: var(--info);
+  border-color: var(--info);
+  color: var(--white);
+}
+
+.btn-secondary-outline {
+  background-color: transparent;
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+.btn-secondary-outline:hover {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: var(--white);
+}
