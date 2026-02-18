@@ -1,8 +1,9 @@
 package com.teste.tecnico.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.teste.tecnico.dtos.RawMaterialDTO;
 import com.teste.tecnico.exceptions.ResourceNotFoundException;
@@ -24,11 +25,9 @@ public class RawMaterialService {
 		this.mapper = mapper;
 	}
 
-	public List<RawMaterialDTO> getAllRawMaterials() {
-        return materialRepository.findAll()
-        		.stream()
-                .map(mapper::toDTO)
-                .toList();
+	public Page<RawMaterialDTO> getAllRawMaterials(Pageable pageable) {
+        return materialRepository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 	
 	public RawMaterialDTO getById(int id) {

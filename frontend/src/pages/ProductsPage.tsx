@@ -6,17 +6,37 @@ import ProductForm from '../components/forms/ProductForm';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 import ConfirmDialog from '../components/common/ConfirmDialog';
+import Pagination from '../components/common/Pagination';
 import { CreateProductDTO } from '../dtos/product.dto';
-import { FaEdit, FaPlus, FaTrash, FaBoxes, FaPuzzlePiece } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTrash, FaBoxes, FaPuzzlePiece, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import IconButton from '../components/common/IconButton';
 
 const ProductsPage = () => {
-  const { products, loading, error, fetchProducts, createProduct, updateProduct, deleteProduct, clearError } = useProducts();
+  const {
+    products,
+    page,
+    totalPages,
+    loading,
+    error,
+    sort,
+    goToPage,
+    handleSort,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    clearError,
+  } = useProducts();
+
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<CreateProductDTO | undefined>();
   const [editingId, setEditingId] = useState<number | undefined>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [productToDelete, setProductToDelete] = useState<number | null>(null);
+
+  const getSortIcon = (field: string) => {
+    if (!sort.includes(field)) return <FaSort className="ms-1" />;
+    return sort.endsWith('asc') ? <FaSortUp className="ms-1" /> : <FaSortDown className="ms-1" />;
+  };
 
   const handleOpenCreate = () => {
     setEditingProduct(undefined);
@@ -36,6 +56,7 @@ const ProductsPage = () => {
     } else {
       await createProduct(data);
     }
+    setShowModal(false);
   };
 
   const handleDeleteClick = (id: number) => {
@@ -65,14 +86,14 @@ const ProductsPage = () => {
           message={error}
           dismissible
           onClose={clearError}
-          onRetry={fetchProducts}
+          onRetry={() => goToPage(page)}
         />
       )}
 
       <Card className="shadow-sm border-0">
         <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center">
           <span className="fw-semibold">Lista de Produtos</span>
-          <IconButton icon={FaPlus} className='btn-create' size="sm" onClick={handleOpenCreate}>
+          <IconButton icon={FaPlus} className="btn-create" size="sm" onClick={handleOpenCreate}>
             Adicionar Novo
           </IconButton>
         </Card.Header>
@@ -80,9 +101,15 @@ const ProductsPage = () => {
           <Table striped hover responsive className="mb-0 align-middle">
             <thead className="bg-light">
               <tr>
-                <th className="ps-4">ID</th>
-                <th>Nome</th>
-                <th>Preço</th>
+                <th className="ps-4" style={{ cursor: 'pointer' }} onClick={() => handleSort('id')}>
+                  ID {getSortIcon('id')}
+                </th>
+                <th style={{ cursor: 'pointer' }} onClick={() => handleSort('name')}>
+                  Nome {getSortIcon('name')}
+                </th>
+                <th style={{ cursor: 'pointer' }} onClick={() => handleSort('price')}>
+                  Preço {getSortIcon('price')}
+                </th>
                 <th className="text-center">Ações</th>
                 <th className="text-center">Associações</th>
               </tr>
@@ -95,7 +122,7 @@ const ProductsPage = () => {
                   </td>
                 </tr>
               ) : (
-                products.map(p => (
+                products.map((p) => (
                   <tr key={p.id}>
                     <td className="ps-4">{p.id}</td>
                     <td className="fw-medium">{p.name}</td>
@@ -111,7 +138,7 @@ const ProductsPage = () => {
                       </IconButton>
                       <IconButton
                         icon={FaTrash}
-                        className='btn-remove'
+                        className="btn-remove"
                         size="sm"
                         onClick={() => handleDeleteClick(p.id)}
                       >
@@ -120,7 +147,7 @@ const ProductsPage = () => {
                     </td>
                     <td className="text-center">
                       <Link to={`/products/${p.id}`}>
-                        <IconButton icon={FaPuzzlePiece} className='btn-details-outline' size="sm">
+                        <IconButton icon={FaPuzzlePiece} className="btn-details-outline" size="sm">
                           Associar
                         </IconButton>
                       </Link>
@@ -130,6 +157,11 @@ const ProductsPage = () => {
               )}
             </tbody>
           </Table>
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+          />
         </Card.Body>
       </Card>
 

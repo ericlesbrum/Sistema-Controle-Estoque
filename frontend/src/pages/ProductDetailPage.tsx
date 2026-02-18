@@ -3,13 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Table, Card } from 'react-bootstrap';
 import { useAssociations } from '../hooks/useAssociations';
 import { useRawMaterials } from '../hooks/useRawMaterials';
-import { useProducts } from '../hooks/useProducts';
+import { useProduct } from '../hooks/useProduct';
 import AssociationForm from '../components/forms/AssociationForm';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 import ConfirmDialog from '../components/common/ConfirmDialog';
-import { CreateAssociationDTO } from '../dtos/productRawMaterial.dto';
-import { FaArrowLeft, FaEdit, FaPlus, FaTrash, FaBoxOpen } from 'react-icons/fa';
+import Pagination from '../components/common/Pagination';
+import { CreateAssociationDTO, ProductRawMaterial } from '../dtos/productRawMaterial.dto';
+import { FaArrowLeft, FaEdit, FaPlus, FaTrash, FaBoxOpen, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import IconButton from '../components/common/IconButton';
 
 const ProductDetailPage = () => {
@@ -17,19 +18,24 @@ const ProductDetailPage = () => {
   const productId = Number(id);
   const navigate = useNavigate();
 
-  const { products } = useProducts();
-  const product = products.find((p) => p.id === productId);
+  const { product, loading: productLoading, error: productError } = useProduct(productId);
   const {
     associations,
-    loading,
-    error,
+    page,
+    totalPages,
+    loading: assocLoading,
+    error: assocError,
+    sort,
     fetchAssociations,
+    goToPage,
+    handleSort,
     createAssociation,
     updateAssociation,
     deleteAssociation,
     clearError,
   } = useAssociations(productId);
-  const { materials: rawMaterials } = useRawMaterials();
+
+  const { materials: rawMaterials, loading: materialsLoading } = useRawMaterials();
 
   const [showModal, setShowModal] = useState(false);
   const [editingAssociation, setEditingAssociation] = useState<CreateAssociationDTO | undefined>();
@@ -37,13 +43,18 @@ const ProductDetailPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [associationToDelete, setAssociationToDelete] = useState<number | null>(null);
 
+  const getSortIcon = (field: string) => {
+    if (!sort.includes(field)) return <FaSort className="ms-1" />;
+    return sort.endsWith('asc') ? <FaSortUp className="ms-1" /> : <FaSortDown className="ms-1" />;
+  };
+
   const handleOpenCreate = () => {
     setEditingAssociation(undefined);
     setEditingId(undefined);
     setShowModal(true);
   };
 
-  const handleOpenEdit = (assoc: any) => {
+  const handleOpenEdit = (assoc: ProductRawMaterial) => {
     setEditingAssociation({
       productId: assoc.productId,
       rawMaterialId: assoc.rawMaterialId,
@@ -59,6 +70,7 @@ const ProductDetailPage = () => {
     } else {
       await createAssociation(data);
     }
+    setShowModal(false);
   };
 
   const handleDeleteClick = (id: number) => {
@@ -74,7 +86,10 @@ const ProductDetailPage = () => {
     }
   };
 
-  if (loading && associations.length === 0) return <LoadingSpinner />;
+  const loading = productLoading || (assocLoading && associations.length === 0) || materialsLoading;
+  const error = productError || assocError;
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="container py-4">
@@ -93,7 +108,7 @@ const ProductDetailPage = () => {
           message={error}
           dismissible
           onClose={clearError}
-          onRetry={fetchAssociations}
+          onRetry={() => fetchAssociations(page, sort)}
         />
       )}
 
@@ -108,8 +123,12 @@ const ProductDetailPage = () => {
           <Table striped hover responsive className="mb-0">
             <thead className="bg-light">
               <tr>
-                <th className="ps-4">Matéria-Prima</th>
-                <th>Quantidade</th>
+                <th className="ps-4" style={{ cursor: 'pointer' }} onClick={() => handleSort('rawMaterialName')}>
+                  Matéria-Prima {getSortIcon('rawMaterialName')}
+                </th>
+                <th style={{ cursor: 'pointer' }} onClick={() => handleSort('quantity')}>
+                  Quantidade {getSortIcon('quantity')}
+                </th>
                 <th className="text-end pe-4">Ações</th>
               </tr>
             </thead>
@@ -121,7 +140,7 @@ const ProductDetailPage = () => {
                   </td>
                 </tr>
               ) : (
-                associations.map((a) => (
+                associations.map((a: ProductRawMaterial) => (
                   <tr key={a.id}>
                     <td className="ps-4 fw-medium">{a.rawMaterialName}</td>
                     <td>{a.quantity}</td>
@@ -148,6 +167,11 @@ const ProductDetailPage = () => {
               )}
             </tbody>
           </Table>
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+          />
         </Card.Body>
       </Card>
 

@@ -1,9 +1,12 @@
 import api from './api';
 import { Product, CreateProductDTO, UpdateProductDTO } from '../dtos/product.dto';
+import { Page } from '../dtos/page';
 
 export const productService = {
-  getAll: () =>
-    api.get<Product[]>('/products'),
+  getAll: (page = 0, size = 10, sort = 'id,asc') =>
+    api.get<Page<Product>>('/products', {
+      params: { page, size, sort },
+    }),
   getById: (id: number) =>
     api.get<Product>(`/products/${id}`),
   create: (data: CreateProductDTO) =>

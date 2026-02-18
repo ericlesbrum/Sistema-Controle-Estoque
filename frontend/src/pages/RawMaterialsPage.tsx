@@ -5,17 +5,38 @@ import RawMaterialForm from '../components/forms/RawMaterialForm';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 import ConfirmDialog from '../components/common/ConfirmDialog';
+import Pagination from '../components/common/Pagination';
 import { CreateRawMaterialDTO } from '../dtos/rawMaterial.dto';
-import { FaPlus, FaEdit, FaTrash, FaCube } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaCube, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import IconButton from '../components/common/IconButton';
 
 const RawMaterialsPage = () => {
-  const { materials, loading, error, fetchMaterials, createMaterial, updateMaterial, deleteMaterial, clearError } = useRawMaterials();
+  const {
+    materials,
+    page,
+    totalPages,
+    loading,
+    error,
+    sort,
+    fetchMaterials,
+    goToPage,
+    handleSort,
+    createMaterial,
+    updateMaterial,
+    deleteMaterial,
+    clearError,
+  } = useRawMaterials();
+
   const [showModal, setShowModal] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState<CreateRawMaterialDTO | undefined>();
   const [editingId, setEditingId] = useState<number | undefined>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [materialToDelete, setMaterialToDelete] = useState<number | null>(null);
+
+  const getSortIcon = (field: string) => {
+    if (!sort.includes(field)) return <FaSort className="ms-1" />;
+    return sort.endsWith('asc') ? <FaSortUp className="ms-1" /> : <FaSortDown className="ms-1" />;
+  };
 
   const handleOpenCreate = () => {
     setEditingMaterial(undefined);
@@ -35,6 +56,7 @@ const RawMaterialsPage = () => {
     } else {
       await createMaterial(data);
     }
+    setShowModal(false);
   };
 
   const handleDeleteClick = (id: number) => {
@@ -64,7 +86,7 @@ const RawMaterialsPage = () => {
           message={error}
           dismissible
           onClose={clearError}
-          onRetry={fetchMaterials}
+          onRetry={() => fetchMaterials(page, sort)}
         />
       )}
 
@@ -79,9 +101,15 @@ const RawMaterialsPage = () => {
           <Table striped hover responsive className="mb-0 align-middle">
             <thead className="bg-light">
               <tr>
-                <th className="ps-4">ID</th>
-                <th>Nome</th>
-                <th>Quantidade em Estoque</th>
+                <th className="ps-4" style={{ cursor: 'pointer' }} onClick={() => handleSort('id')}>
+                  ID {getSortIcon('id')}
+                </th>
+                <th style={{ cursor: 'pointer' }} onClick={() => handleSort('name')}>
+                  Nome {getSortIcon('name')}
+                </th>
+                <th style={{ cursor: 'pointer' }} onClick={() => handleSort('stockQuantity')}>
+                  Quantidade em Estoque {getSortIcon('stockQuantity')}
+                </th>
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
@@ -121,6 +149,11 @@ const RawMaterialsPage = () => {
               )}
             </tbody>
           </Table>
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+          />
         </Card.Body>
       </Card>
 

@@ -1,7 +1,7 @@
 package com.teste.tecnico.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,15 +54,16 @@ public class ProductRawMaterialService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ProductRawMaterialResponseDTO> getAll() {
-		return productRawMaterialRepository.findAll().stream().map(this::toResponseDTO).collect(Collectors.toList());
-	}
+    public Page<ProductRawMaterialResponseDTO> getAll(Pageable pageable) {
+        return productRawMaterialRepository.findAll(pageable)
+                .map(this::toResponseDTO);
+    }
 
-	@Transactional(readOnly = true)
-	public List<ProductRawMaterialResponseDTO> getByProductId(int productId) {
-		return productRawMaterialRepository.findByProductId(productId).stream().map(this::toResponseDTO)
-				.collect(Collectors.toList());
-	}
+    @Transactional(readOnly = true)
+    public Page<ProductRawMaterialResponseDTO> getByProductId(int productId, Pageable pageable) {
+        return productRawMaterialRepository.findByProductId(productId, pageable)
+                .map(this::toResponseDTO);
+    }
 
 	@Transactional
 	public ProductRawMaterialResponseDTO updateAssociation(int id, ProductRawMaterialDTO dto) {

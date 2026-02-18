@@ -1,6 +1,9 @@
 package com.teste.tecnico.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 import org.springframework.stereotype.Service;
 
 import com.teste.tecnico.dtos.ProductDTO;
@@ -20,11 +23,9 @@ public class ProductService {
 		this.mapper = mapper;
 	}
 
-	public List<ProductDTO> getAllProducts() {
-        return productRepository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
+	public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 	
 	public ProductDTO create(ProductDTO productDTO) {

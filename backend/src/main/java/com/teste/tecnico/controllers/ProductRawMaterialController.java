@@ -1,5 +1,10 @@
 package com.teste.tecnico.controllers;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 import com.teste.tecnico.dtos.ProductRawMaterialDTO;
 import com.teste.tecnico.dtos.ProductRawMaterialResponseDTO;
 import com.teste.tecnico.services.ProductRawMaterialService;
@@ -9,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/product-raw-materials")
@@ -33,13 +37,16 @@ public class ProductRawMaterialController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductRawMaterialResponseDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<Page<ProductRawMaterialResponseDTO>> getAll(
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(service.getAll(pageable));
     }
-
+    
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<ProductRawMaterialResponseDTO>> getByProduct(@PathVariable("productId") int productId) {
-        return ResponseEntity.ok(service.getByProductId(productId));
+    public ResponseEntity<Page<ProductRawMaterialResponseDTO>> getByProduct(
+            @PathVariable int productId,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(service.getByProductId(productId, pageable));
     }
 
     @PutMapping("/{id}")
